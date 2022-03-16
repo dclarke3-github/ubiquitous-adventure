@@ -41,4 +41,3 @@ for number in "${numbers_array[@]}"
 do 
     printf "\nTask "$number" conversion chain:$(cat task$number.cli)\n" 
 
-done 
