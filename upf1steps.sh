@@ -1,7 +1,5 @@
 #Check if user matches.
 if [ dclarke3$(whoami) == $dclarke3 ]; run
-   else [ dclarke3$(whoami) -ne $dclarke3 ]
-	quit
 
 #On Pi.
 mkdir ./upf1
