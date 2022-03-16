@@ -1,0 +1,44 @@
+#Check if user matches.
+if [ dclarke3$(whoami) == $dclarke3 ]; run
+
+#On Pi.
+mkdir ./upf1
+cd ./upf1
+
+#Getting Latest version of unittools
+curl 'https://lab46.g7n.org/~wedge/projects/unittools/LATEST' > LATEST
+cat ./LATEST 
+late=$( cat ./LATEST  )
+unitools=$( echo "unittools-" )
+extension=$( echo ".tar.gz" )
+wget "https://lab46.g7n.org/~wedge/projects/unittools/${unitools}${late}${extension}"
+
+#Extracing/Decompressing
+gzip --decompress unittools-20220309-11.tar.gz
+tar -xf unittools-20220309-11.tar
+
+#Installing tools
+cd ./unittools
+make
+make install
+
+#Starting conversions
+echo "1920 yd" | yd2mi -I "->" -d "->" | mi2km -I "->" -d "->" >task0.cli
+echo "0.73 km" | km2ft -I "->" -d "->" | ft2hm -p "2" -I "->" -d "->" > task1.cli
+echo "0.962 km" | km2ft -I "::" -d "::" -p "3" | ft2hm -p "3" | hm2dm -p 3 > task2.cli
+echo "762 in" | in2ft -I "::" -d "::" -p "3" | ft2hm -p "3" | hm2Dm -p "3" > task3.cli
+echo "373 mm" | mm2dm -p "4" -I "," -d "," | dm2cm -p "4" -I "," -d "," | cm2in -p "4" -I "," -d "," | in2cu -p "4" -T "sumerian" > task4.cli
+echo "771 hm" | hm2dm -p "4" -I "," -d "," | dm2cm -p "4" -I "," -d "," | cm2in -p "4" -I "," -d "," | in2ft -p "4" | ft2yd -p "4" -I "," -d "," | yd2st -T "olympic" -p "4" -I "," -d "," > task5.cli
+echo "47 st" | st2mi -T "ptolemaic" -p 5 -I "-=>"  -d "-=>"  | mi2yd -p 5 -I "-=>" -d "-=>" | yd2st -p 5 -T "itinerary" -I "-=>"  -d "-=>" > task6.cli
+echo "2601 cu" | cu2mm -T "egyptian" -p "5" -I "-=>" -d "-=>" | mm2dm -p "5" -I "-=>" -d "-=>" | dm2cm -p "5" -I "-=>" -d "-=>"| cm2in -p "5" -I "-=>" -d "-=>" | in2ft -p "5" -I "-=>" -d "-=>" | ft2yd -p "5" -I "-=>" -d "-=>" | yd2st -T "egyptian" -p "5" -I "-=>" -d "-=>" > task7.cli
+mkdir ./taskfiles
+cp task*.cli ./taskfiles
+
+#Looping through an reading the files.
+declare -a numbers_array=("1" "2" "3" "4" "5" "6" "7")
+
+for number in "${numbers_array[@]}"
+do 
+    printf "\nTask "$number" conversion chain:$(cat task$number.cli)\n" 
+
+exit (0)
